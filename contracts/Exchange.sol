@@ -17,11 +17,42 @@ contract Exchange {
     mapping (uint256 => bool) public cancelledOrders;
     mapping (uint256 => bool) public FilledOrders;
 
-    event Deposit(address _token, address _user,uint256 _amount,uint256 _balance );
-    event Withdraw(address _token, address _user, uint256 _amount, uint256 _balance);
-    event Order(uint256 _id, address _user, address _tokenGet, uint256 _amountGet,address _tokenGive, uint256 _amountGive,uint256 _timestamp);
-    event Cancel(uint256 _id, address _user, address _tokenGet, uint256 _amountGet,address _tokenGive, uint256 _amountGive,uint256 _timestamp);
-    event Trade(uint256 _id, address _user, address _tokenGet, uint256 _amountGet,address _tokenGive, uint256 _amountGive,address _creator,uint256 _timestamp);
+    event Deposit(
+        address _token, 
+        address _user,
+        uint256 _amount,
+        uint256 _balance );
+    event Withdraw(
+        address _token, 
+        address _user, 
+        uint256 _amount, 
+        uint256 _balance);
+    event Order(
+        uint256 _id, 
+        address _user, 
+        address _tokenGet, 
+        uint256 _amountGet,
+        address _tokenGive, 
+        uint256 _amountGive,
+        uint256 _timestamp);
+    event Cancel(
+        uint256 _id, 
+        address _user, 
+        address _tokenGet, 
+        uint256 _amountGet,
+        address _tokenGive, 
+        uint256 _amountGive,
+        uint256 _timestamp);
+
+    event Trade(
+        uint256 _id, 
+        address _user, 
+        address _tokenGet, 
+        uint256 _amountGet,
+        address _tokenGive, 
+        uint256 _amountGive,
+        address _creator,
+        uint256 _timestamp);
     
         
     struct _Order {

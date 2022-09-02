@@ -13,8 +13,14 @@ contract Token{
     mapping(address => uint256) public balanceOf;
     mapping (address => mapping (address => uint256)) public allowance;
 
-    event Transfer(address indexed _from,address indexed _to,uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    event Transfer(
+        address indexed _from,
+        address indexed _to,
+        uint256 _value);
+    event Approval(
+        address indexed _owner, 
+        address indexed _spender, 
+        uint256 _value);
 
     constructor(string memory _name, string memory _symbol, uint256  _totalSupply){
         name = _name ;

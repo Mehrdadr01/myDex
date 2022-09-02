@@ -43,7 +43,7 @@ async function main() {
     const exchange = await ethers.getContractAt('Exchange', config[chainId].exchange.address) 
     console.log(`exchange Token fetched: ${exchange.address}`)
 
-    // give token to account 1 because we assign all token to user0 the deployer at constrcutor in Token smart contract 
+    // give token to account 1 because we assign all token to user0 the deployer at constructor in Token smart contract 
     const sender = accounts[0]
     const receiver = accounts[1]
     let amount = tokens(10000)
@@ -89,7 +89,7 @@ async function main() {
 
     //user1 make order to get tokens 
     let orderId
-    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(100),mehrdad.address, tokens(5))
+    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(5),mehrdad.address, tokens(1))
     result = await transaction.wait()
     console.log(`Make order from ${user1.address}`)
     // new added line 
@@ -108,7 +108,7 @@ async function main() {
                      ////////////////////////////
                     ////  Seed filled Order ////
     // user1 make an order
-    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(100),mehrdad.address, tokens(10))
+    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(4),mehrdad.address, tokens(2))
     result = await transaction.wait()
     console.log(`Make order from ${user1.address}`)
 
@@ -126,7 +126,7 @@ async function main() {
     
     
     // user1 make another order
-    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(50),mehrdad.address, tokens(15))
+    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(4),mehrdad.address, tokens(2))
     result = await transaction.wait()
     console.log(`Make order from ${user1.address}`)
 
@@ -140,7 +140,7 @@ async function main() {
 
 
     // user1 makes final order
-    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(200),mehrdad.address, tokens(20))
+    transaction = await exchange.connect(user1).makeOrder(mEth.address, tokens(1),mehrdad.address, tokens(1))
     result = await transaction.wait()
     console.log(`Make order from ${user1.address}`)
 
@@ -158,7 +158,7 @@ async function main() {
                     ////  Seed open Order ////
     //user1
     for(let i=0 ; i<=10 ; i++){
-        transaction= await exchange.connect(user1).makeOrder(mEth.address,tokens(10 * i), mehrdad.address, tokens(10))
+        transaction= await exchange.connect(user1).makeOrder(mEth.address,tokens(1 * i), mehrdad.address, tokens(1))
         result = await transaction.wait()
 
         console.log(`Make order from ${user1.address}`)
@@ -166,7 +166,7 @@ async function main() {
     }
     // user2 
     for(let i=0 ; i<=10 ; i++){
-        transaction= await exchange.connect(user2).makeOrder(mehrdad.address,tokens(10), mEth.address, tokens(10*i))
+        transaction= await exchange.connect(user2).makeOrder(mehrdad.address,tokens(1), mEth.address, tokens(1*i))
         result = await transaction.wait()
 
         console.log(`Make order from ${user2.address}`)
