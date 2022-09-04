@@ -1,9 +1,7 @@
 import { createSelector } from "reselect";
-import { get, groupBy, reject } from 'lodash'
+import { get, groupBy, reject , maxBy, minBy} from 'lodash'
 import { ethers } from "ethers";
 import  moment  from "moment";
-
-
 
 const tokens = state => get(state, 'tokens.contracts')
 const allOrders = state => get(state, 'exchange.allOrders.data', [])
@@ -12,7 +10,6 @@ const filledOrders = state => get(state, 'exchange.filledOrders.data', [])
 
 const GREEN = '#25CE8F'
 const RED = '#F45353'
-
 
 const openOrders = state => {
     const all  =allOrders(state)
@@ -57,15 +54,15 @@ const decorateOrder = (order, tokens) => {
         
     })
 }
+/////////////  Order book ///////////////
 
-//  order book
 export const orderBookSelector = createSelector(
     allOrders, 
     tokens, 
     (orders, tokens)=>{
-   if(!tokens[0] || !tokens[1]){ return console.log('gi de ali') }
+   if(!tokens[0] || !tokens[1]){ return console.log() }
 
-   console.log('before: ',orders, tokens)
+  // console.log('before: ',orders, tokens)
    
    // filter orders by selected tokens
    orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
@@ -89,8 +86,8 @@ export const orderBookSelector = createSelector(
     sellOrders: sellOrders.sort((a,b)=> b.tokenPrice - a.tokenPrice)
    }
    //console.log(allOrders)
-   console.log('buy orders: ', buyOrders,tokens)
-   console.log('sell orders: ', sellOrders,tokens)
+  // console.log('buy orders: ', buyOrders,tokens)
+   //console.log('sell orders: ', sellOrders,tokens)
    return orders
 })
 const decorateOrderBookOrders = (orders, tokens) => {
@@ -117,5 +114,63 @@ const decorateOrderBookOrder = (order, tokens) => {
     })
 
 
+
+}
+//////////// Price chart ///////////////
+
+export const priceChartSelector = createSelector(
+    allOrders,
+    tokens,
+    (orders, tokens) => {
+        if(!tokens[0] || !tokens[1]) { return }
+        //filter orders by selected tokens
+        orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
+        orders = orders.filter((order)=> order._tokenGive === tokens[0].address || order._tokenGive === tokens[1].address)
+        
+        //sort orders by date 4 history comparison 
+        orders = orders.sort((a,b) => a._timestamp - b._timestamp) 
+        // Decorate the orders - add display attributes 
+        orders = orders.map((order)=> decorateOrder(order, tokens))
+        //console.log('Before : ', orders)
+       
+        let lastOrder, secondLastOrder //= orders[orders.length -1 ]
+        [lastOrder, secondLastOrder] = orders.slice(orders.length, orders.length - 2)
+        const lastPrice = get(lastOrder, 'tokenPrice', 0) // last price 
+        const secondLastPrice = get(secondLastOrder, 'tokenPrice', 0)
+       // console.log('graphData',graphData)
+        return({
+            lastPrice,
+            lastPriceChange: (lastPrice >= secondLastPrice ? '+' : '-'),
+            series: [{
+                data: createGraphData(orders)
+            }]
+        })
+
+    }
+)
+
+const createGraphData = (orders) =>{
+    // group the orders by hour for the graph 
+    orders = groupBy(orders, (order) => moment.unix(order._timestamp).startOf('hour').format())
+    //console.log('After : ', orders)
+    // get each hour where data exist 
+    const hours = Object.keys(orders)
+
+    // creating the graph series 
+    const graphData = hours.map((hour)=>{
+        // fetch all orders from current hour 
+        const group = orders[hour]
+        //calc price values : open , high, low , close 
+        const open = group[0]                // first order of the hour 
+        const high = maxBy(group, 'tokenPrice')// highest price 
+        const low = minBy(group, 'tokenPrice') // lowest price 
+        const close = group[group.length -1] // last order of the hour 
+        return({
+            x: new Date(hour),
+            y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice]
+        })
+    })
+
+    return graphData
 
 }

@@ -30,8 +30,9 @@ describe('Exchange', ()=>{
         user2 = accounts[3]
         user3 = accounts[4]
         
-        // wetihout this to transfer token to user 1 we run an error because of insifisint balance from transferFrom func from this requrement (require(_value <=  balanceOf[_from]);) 
-        // so we add 100 token to user1 account from deployer
+        /*/ without this to transfer token to user 1 we run an error because of insiffisint balance 
+            from transferFrom func from this requirement (require(_value <=  balanceOf[_from]);) 
+        //  so we add 100 token to user1 account from deployer */
         let tranaction = await token1.connect(deployer).transfer(user1.address, tokens(100))
         await tranaction.wait()
         exchange  = await Exchange.deploy(feeAccount.address, feePercent)
@@ -101,7 +102,7 @@ describe('Exchange', ()=>{
         })
     })
 
-    describe('Withdwaing Tokens', ()=>{
+    describe('Withdrawing Tokens', ()=>{
         let tranaction, 
             result,
             amount = tokens(10)
