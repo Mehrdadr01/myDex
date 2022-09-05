@@ -24,6 +24,52 @@ const openOrders = state => {
     })
     return openOrders
 }
+/////////// All Filled Orders ///////////
+export const filledOrdersSelector = createSelector(allOrders, tokens , // allOrders must be replace with filledOrders (this is just because we don't have filledOrders yet )
+    (orders, tokens)=>{
+        if(!tokens[0] || !tokens[1]){ return console.log() }
+      
+        // filter orders by selected tokens
+        orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
+        orders = orders.filter((order)=> order._tokenGive === tokens[0].address || order._tokenGive === tokens[1].address)
+        /* 
+        Step 01. sort orders by time ascending
+        Step 02. apply orders by color (decorate orders)
+        Step 03. sort order by time descending (for UI purposes )  
+        */
+       // Step 01
+        orders = orders.sort((a,b) => a._timestamp - b._timestamp) // Step 01
+        orders = decorateFilledOrders(orders, tokens)              // Step 02
+        orders = orders.sort((a,b)=> b._timestamp - a._timestamp)  // Step 03 
+        console.log(orders)
+        return orders
+})
+const decorateFilledOrders = (orders, tokens )=>{
+    let previousOrder = orders[0]
+    return (
+        orders.map((order)=>{
+            order = decorateOrder(order, tokens)
+            order = decorateFilledOrder(order, previousOrder)
+            previousOrder = order // update the previous order after decoration 
+            return order 
+        })
+    )
+}
+const decorateFilledOrder = (order , previousOrder)=>{
+    return ({
+        ...order, 
+        tokenPriceClass: tokenPriceClass(order.tokenPrice, order._id, previousOrder)
+    })
+}
+const tokenPriceClass = (currentTokenPrice,orderID,previousOrder) => {
+    if (previousOrder._id === orderID){ // show green for just 1 order or our first order 
+        return GREEN
+    }
+    if(previousOrder.tokenPrice <= currentTokenPrice){
+        return GREEN }else{ // return green if the price goes up 
+            return RED      // and red if goes down 
+        }
+}
 
 const decorateOrder = (order, tokens) => {
     let token_00_amount,
@@ -49,16 +95,14 @@ const decorateOrder = (order, tokens) => {
         token_00_amount: ethers.utils.formatUnits(token_00_amount, "ether"),
         token_01_amount: ethers.utils.formatUnits(token_01_amount, "ether"),
         tokenPrice : tokenPrice,
-        formattedTimeStamp: moment.unix(order._timeStamp).format('h:mm:ss d MMM D')
+        formattedTimeStamp: moment.unix(order._timestamp).format('h:mm:ss d MMM D')
 
         
     })
 }
 /////////////  Order book ///////////////
 
-export const orderBookSelector = createSelector(
-    allOrders, 
-    tokens, 
+export const orderBookSelector = createSelector( allOrders,tokens, 
     (orders, tokens)=>{
    if(!tokens[0] || !tokens[1]){ return console.log() }
 
@@ -119,7 +163,7 @@ const decorateOrderBookOrder = (order, tokens) => {
 //////////// Price chart ///////////////
 
 export const priceChartSelector = createSelector(
-    allOrders,
+    allOrders, // it should be the open orders not all orders (modified this later )
     tokens,
     (orders, tokens) => {
         if(!tokens[0] || !tokens[1]) { return }
