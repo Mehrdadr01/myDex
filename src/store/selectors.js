@@ -136,6 +136,48 @@ const decorateOrder = (order, tokens) => {
         
     })
 }
+///////////// Filled Orders /////////////
+export const myFilledOrdersSelector =createSelector(account , tokens , allOrders, // again use allOrder instead of FilledOrders u know why 
+    (account, tokens, orders)=>{
+        if(!tokens[0] || !tokens[1]) { return }
+        // find our orders 
+        orders = orders.filter((order)=> order._user === account || order._creator === account)
+        // filter orders by selected trading pair 
+        orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
+        orders = orders.filter((order)=> order._tokenGive === tokens[0].address || order._tokenGive === tokens[1].address)
+        // sort by time descending 
+        orders = orders.sort((a,b)=> b._timestamp - a._timestamp)
+        // decorate orders for UI 
+        orders = decorateMyFilledOrders(orders, account, tokens)
+        console.log('gi de ghoran: ', orders)
+        
+        return orders
+})
+const decorateMyFilledOrders = (orders, account,tokens)=>{
+    return(
+        orders.map((order)=>{
+            order = decorateOrder(order, tokens)
+            order = decorateMyFilledOrder(order, account, tokens)
+            return (order)
+        })
+    )
+} 
+const decorateMyFilledOrder = (order, account,tokens)=>{
+    // orderType = order._tokenGet === tokens[1].address ? 'buy' : 'sell'
+    let orderType,myOrder = order._creator === account
+    if(myOrder){
+        orderType = order._tokenGive === tokens[1].address ? 'buy' : 'sell'
+    }else{
+        orderType = order._tokenGive === tokens[1].address ? 'sell' : 'buy'
+    }
+    return ({
+        ...order,
+        orderType,
+        orderClass:(orderType=== 'buy' ? GREEN : RED),
+        orderSign:(orderType=== 'buy' ? '+' : '-')
+        
+    })
+}
 /////////////  Order book ///////////////
 
 export const orderBookSelector = createSelector( allOrders,tokens, 
