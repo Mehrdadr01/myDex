@@ -3,6 +3,7 @@ import { get, groupBy, reject , maxBy, minBy} from 'lodash'
 import { ethers } from "ethers";
 import  moment  from "moment";
 
+const account = state => get(state, 'provider.account')
 const tokens = state => get(state, 'tokens.contracts')
 const allOrders = state => get(state, 'exchange.allOrders.data', [])
 const cancelledOrders = state => get(state, 'exchange.cancelledOrders.data', [])
@@ -70,7 +71,42 @@ const tokenPriceClass = (currentTokenPrice,orderID,previousOrder) => {
             return RED      // and red if goes down 
         }
 }
+/////////// My open orders ////////////
+export const myOpenOrdersSelector =createSelector(account , tokens , allOrders, // again use allOrder instead of openOrders u know why 
+    (account, tokens, orders)=>{
+        if(!tokens[0] || !tokens[1]) { return }
+        // Filter orders created bt current account 
+        orders = orders.filter((order)=> order._user === account) 
+        // filter orders by selected tokens
+        orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
+        orders = orders.filter((order)=> order._tokenGive === tokens[0].address || order._tokenGive === tokens[1].address)
+        // decorate orders - adding attributes for UI
+        
+        orders = decorateMyOpenOrders(orders, tokens)
+        // Sort order by time descending 
+        orders = orders.sort((a,b)=> b._timestamp - a._timestamp)
 
+        console.log(orders)
+        return orders
+})
+const decorateMyOpenOrders = (orders, tokens)=>{
+    return(
+        orders.map((order)=>{
+            order = decorateOrder(order, tokens )
+            order = decorateMyOpenOrder(order, tokens)
+            return (order)
+        })
+    )
+} 
+const decorateMyOpenOrder = (order, tokens)=>{
+    let orderType = order._tokenGet === tokens[1].address ? 'buy' : 'sell'
+
+    return ({
+        ...order,
+        orderType,
+        orderTypeClass:(orderType=== 'buy' ? GREEN : RED )
+    })
+}
 const decorateOrder = (order, tokens) => {
     let token_00_amount,
         token_01_amount
