@@ -272,7 +272,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action)=>{
                     isPending: false,
                     isSuccessful: true
                 },
-                events: [action.event, ...state.events]
+                events: [action.event, ...state.events] // we set the last event at the top (last event at event[0] or the first element)
 
             }
         case 'NEW_ORDER_FAIL':

@@ -9,7 +9,7 @@ import { loadProvider ,
          loadTokens , 
          loadExchange,
          subscribeToEvent,
-         loadAllOrders
+         loadAllOrders,
         }  from '../store/interactions';
 
 import Navbar from './Navbar';
@@ -20,6 +20,7 @@ import OrderBook from './OrderBook';
 import PriceChart from './PriceChart';
 import Trades from './Trades';
 import Transactions from './Transactions';
+import Alert from './Alert';
 
 function App() {
   // Dispatch for later use
@@ -87,7 +88,7 @@ function App() {
         </section>
       </main>
 
-      {/* Alert */}
+      <Alert />
 
     </div>
   );
