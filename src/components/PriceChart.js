@@ -28,7 +28,7 @@ const PriceChart = () => {
                     <img src={arrowDown} alt="Arrow down" />
                   )}
                 
-                <span className='up'>{priceChart.lastPrice}</span>
+                <span className='up'> {priceChart.lastPrice} </span>
               </div>
             )}
             
@@ -36,7 +36,7 @@ const PriceChart = () => {
           </div>
         </div>
   
-        {/* Price chart goes here */}
+       
         {!account ? (
             <Banner text={'Please connect with Metamask '}/>
         ):(

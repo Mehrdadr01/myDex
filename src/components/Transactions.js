@@ -20,7 +20,7 @@ const Transactions = () => {
     const tradeRef = useRef(null)
     const orderRef = useRef(null)
     const tabHandler = (e)=>{
-        if(e.target.className != orderRef.current.className){
+        if(e.target.className !== orderRef.current.className){
             e.target.className = 'tab tab--active'
             orderRef.current.className = 'tab'
             setShowMyOrder(false)

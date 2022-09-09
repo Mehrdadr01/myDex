@@ -13,7 +13,7 @@ const GREEN = '#25CE8F'
 const RED = '#F45353'
 
 const openOrders = state => {
-    const all  =allOrders(state)
+    const all = allOrders(state)
     const filled = filledOrders(state)
     const cancelled = cancelledOrders(state)
 
@@ -28,7 +28,7 @@ const openOrders = state => {
 /////////// All Filled Orders ///////////
 export const filledOrdersSelector = createSelector(filledOrders, tokens , 
     (orders, tokens)=>{
-        if(!tokens[0] || !tokens[1]){ return console.log() }
+        if(!tokens[0] || !tokens[1]){ return }
       
         // filter orders by selected tokens
         orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
@@ -38,11 +38,10 @@ export const filledOrdersSelector = createSelector(filledOrders, tokens ,
         Step 02. apply orders by color (decorate orders)
         Step 03. sort order by time descending (for UI purposes )  
         */
-       // Step 01
         orders = orders.sort((a,b) => a._timestamp - b._timestamp) // Step 01
         orders = decorateFilledOrders(orders, tokens)              // Step 02
         orders = orders.sort((a,b)=> b._timestamp - a._timestamp)  // Step 03 
-        console.log(orders)
+        
         return orders
 })
 const decorateFilledOrders = (orders, tokens )=>{
@@ -72,7 +71,7 @@ const tokenPriceClass = (currentTokenPrice,orderID,previousOrder) => {
         }
 }
 /////////// My open orders ////////////
-export const myOpenOrdersSelector =createSelector(account , tokens , openOrders, // again use allOrder instead of openOrders u know why 
+export const myOpenOrdersSelector =createSelector(account , tokens , openOrders,  
     (account, tokens, orders)=>{
         if(!tokens[0] || !tokens[1]) { return }
         // Filter orders created bt current account 
@@ -136,8 +135,8 @@ const decorateOrder = (order, tokens) => {
         
     })
 }
-///////////// Filled Orders /////////////
-export const myFilledOrdersSelector =createSelector(account , tokens , filledOrders, // again use allOrder instead of FilledOrders u know why 
+///////////// My Filled Orders /////////////
+export const myFilledOrdersSelector =createSelector(account , tokens , filledOrders, 
     (account, tokens, orders)=>{
         if(!tokens[0] || !tokens[1]) { return }
         // find our orders 
@@ -162,8 +161,8 @@ const decorateMyFilledOrders = (orders, account,tokens)=>{
     )
 } 
 const decorateMyFilledOrder = (order, account,tokens)=>{
-    // orderType = order._tokenGet === tokens[1].address ? 'buy' : 'sell'
-    let orderType,myOrder = order._creator === account
+    const myOrder = order._creator === account
+    let orderType
     if(myOrder){
         orderType = order._tokenGive === tokens[1].address ? 'buy' : 'sell'
     }else{
@@ -181,10 +180,7 @@ const decorateMyFilledOrder = (order, account,tokens)=>{
 
 export const orderBookSelector = createSelector( openOrders,tokens, 
     (orders, tokens)=>{
-   if(!tokens[0] || !tokens[1]){ return console.log() }
-
-  // console.log('before: ',orders, tokens)
-   
+   if(!tokens[0] || !tokens[1]){ return }
    // filter orders by selected tokens
    orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
    orders = orders.filter((order)=> order._tokenGive === tokens[0].address || order._tokenGive === tokens[1].address)
@@ -206,25 +202,21 @@ export const orderBookSelector = createSelector( openOrders,tokens,
     ...orders,
     sellOrders: sellOrders.sort((a,b)=> b.tokenPrice - a.tokenPrice)
    }
-   //console.log(allOrders)
-  // console.log('buy orders: ', buyOrders,tokens)
-   //console.log('sell orders: ', sellOrders,tokens)
+   
    return orders
 })
 const decorateOrderBookOrders = (orders, tokens) => {
-
    return(
     orders.map((order) => {
         order = decorateOrder(order, tokens)
         order = decorateOrderBookOrder(order, tokens)
         return(order)
-      
+    
      })
    )
 }
 
 const decorateOrderBookOrder = (order, tokens) => {
-
     const orderType = order._tokenGive === tokens[1].address ? 'buy' : 'sell'
 
     return({
@@ -233,15 +225,10 @@ const decorateOrderBookOrder = (order, tokens) => {
         orderTypeClass: (orderType === 'buy' ? GREEN : RED),
         orderFillAction: (orderType === 'buy' ? 'sell' : 'buy')
     })
-
-
-
 }
 //////////// Price chart ///////////////
 
-export const priceChartSelector = createSelector(
-    filledOrders, // it should be the filled orders not all orders (modified this later )
-    tokens,
+export const priceChartSelector = createSelector(filledOrders,tokens,
     (orders, tokens) => {
         if(!tokens[0] || !tokens[1]) { return }
         //filter orders by selected tokens
@@ -252,13 +239,11 @@ export const priceChartSelector = createSelector(
         orders = orders.sort((a,b) => a._timestamp - b._timestamp) 
         // Decorate the orders - add display attributes 
         orders = orders.map((order)=> decorateOrder(order, tokens))
-        //console.log('Before : ', orders)
-       
+        
         let lastOrder, secondLastOrder //= orders[orders.length -1 ]
-        [lastOrder, secondLastOrder] = orders.slice(orders.length, orders.length - 2)
+        [secondLastOrder ,lastOrder] = orders.slice(orders.length - 2, orders.length)
         const lastPrice = get(lastOrder, 'tokenPrice', 0) // last price 
         const secondLastPrice = get(secondLastOrder, 'tokenPrice', 0)
-       // console.log('graphData',graphData)
         return({
             lastPrice,
             lastPriceChange: (lastPrice >= secondLastPrice ? '+' : '-'),
