@@ -26,7 +26,7 @@ const openOrders = state => {
     return openOrders
 }
 /////////// All Filled Orders ///////////
-export const filledOrdersSelector = createSelector(allOrders, tokens , // allOrders must be replace with filledOrders (this is just because we don't have filledOrders yet )
+export const filledOrdersSelector = createSelector(filledOrders, tokens , 
     (orders, tokens)=>{
         if(!tokens[0] || !tokens[1]){ return console.log() }
       
@@ -72,7 +72,7 @@ const tokenPriceClass = (currentTokenPrice,orderID,previousOrder) => {
         }
 }
 /////////// My open orders ////////////
-export const myOpenOrdersSelector =createSelector(account , tokens , allOrders, // again use allOrder instead of openOrders u know why 
+export const myOpenOrdersSelector =createSelector(account , tokens , openOrders, // again use allOrder instead of openOrders u know why 
     (account, tokens, orders)=>{
         if(!tokens[0] || !tokens[1]) { return }
         // Filter orders created bt current account 
@@ -137,7 +137,7 @@ const decorateOrder = (order, tokens) => {
     })
 }
 ///////////// Filled Orders /////////////
-export const myFilledOrdersSelector =createSelector(account , tokens , allOrders, // again use allOrder instead of FilledOrders u know why 
+export const myFilledOrdersSelector =createSelector(account , tokens , filledOrders, // again use allOrder instead of FilledOrders u know why 
     (account, tokens, orders)=>{
         if(!tokens[0] || !tokens[1]) { return }
         // find our orders 
@@ -149,7 +149,6 @@ export const myFilledOrdersSelector =createSelector(account , tokens , allOrders
         orders = orders.sort((a,b)=> b._timestamp - a._timestamp)
         // decorate orders for UI 
         orders = decorateMyFilledOrders(orders, account, tokens)
-        console.log('gi de ghoran: ', orders)
         
         return orders
 })
@@ -180,7 +179,7 @@ const decorateMyFilledOrder = (order, account,tokens)=>{
 }
 /////////////  Order book ///////////////
 
-export const orderBookSelector = createSelector( allOrders,tokens, 
+export const orderBookSelector = createSelector( openOrders,tokens, 
     (orders, tokens)=>{
    if(!tokens[0] || !tokens[1]){ return console.log() }
 
@@ -241,7 +240,7 @@ const decorateOrderBookOrder = (order, tokens) => {
 //////////// Price chart ///////////////
 
 export const priceChartSelector = createSelector(
-    allOrders, // it should be the open orders not all orders (modified this later )
+    filledOrders, // it should be the filled orders not all orders (modified this later )
     tokens,
     (orders, tokens) => {
         if(!tokens[0] || !tokens[1]) { return }
