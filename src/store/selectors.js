@@ -84,7 +84,6 @@ export const myOpenOrdersSelector =createSelector(account , tokens , openOrders,
         orders = orders.filter((order)=> order._tokenGet === tokens[0].address || order._tokenGet === tokens[1].address)
         orders = orders.filter((order)=> order._tokenGive === tokens[0].address || order._tokenGive === tokens[1].address)
         // decorate orders - adding attributes for UI
-        
         orders = decorateMyOpenOrders(orders, tokens)
         // Sort order by time descending 
         orders = orders.sort((a,b)=> b._timestamp - a._timestamp)
@@ -261,7 +260,6 @@ export const priceChartSelector = createSelector(filledOrders,tokens,
 const createGraphData = (orders) =>{
     // group the orders by hour for the graph 
     orders = groupBy(orders, (order) => moment.unix(order._timestamp).startOf('hour').format())
-    //console.log('After : ', orders)
     // get each hour where data exist 
     const hours = Object.keys(orders)
 

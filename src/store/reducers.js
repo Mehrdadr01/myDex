@@ -95,6 +95,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action)=>{
                 loaded: true,
                 contract: action.exchange
             }
+        ///////////////////////// ORDERS LOADED /////////////////////////
         case 'CANCELLED_ORDERS_LOADED':
             return{
                 ...state,
@@ -119,7 +120,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action)=>{
                     data: action.allOrders,
                 },
             }
-        ///////////////////////// CANCELING ORDER/////////////////////////
+        ///////////////////////// CANCELING ORDER /////////////////////////
         case 'ORDER_CANCEL_REQUEST':
             return{
                 ...state,
@@ -156,7 +157,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action)=>{
                     isError: true
                 },
             }
-        ///////////////////////// FILLING ORDER/////////////////////////
+        ///////////////////////// FILLING ORDER /////////////////////////
         case 'ORDER_FILL_REQUEST':
             return{
                 ...state,
@@ -210,6 +211,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action)=>{
                 ...state,
                 balances: [...state.balances, action.balance]
             }
+        ///////////////////////// TRANSFER  : DEPOSIT & WITHDRAW /////////////////////////
         case 'TRANSFER_REQUEST':
             return{
                 ...state,
@@ -243,6 +245,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action)=>{
                 transferInProgress: false
             
         }
+        ///////////////////////// MAKING ORDER /////////////////////////
         case 'NEW_ORDER_REQUEST':
             return{
                 ...state,

@@ -3,35 +3,27 @@ import eth from '../assets/eth.svg'
 import Blockies from 'react-blockies'
 import { useSelector, useDispatch } from 'react-redux';
 import { loadAccount } from '../store/interactions';
-import { loadProvider } from '../store/interactions';
+
 import config from '../config.json'
 
 const Navbar = () => {
-
 
     const provider = useSelector(state => state.provider.connection)
     const chainId = useSelector(state => state.provider.chainId)
     const account = useSelector(state => state.provider.account)
     const balance = useSelector(state => state.provider.balance)
 
-    
-
     const dispatch = useDispatch()
 
     const connectHandler = async()=>{
-          //const provider = loadProvider(dispatch)
-         // if(account){
-            await loadAccount(provider, dispatch)
-        //  }
-          
+      await loadAccount(provider, dispatch)
     }
-    const networkHandler = async(e)=>{
 
+    const networkHandler = async(e)=>{
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId : e.target.value }]
       })
-
     }
 
     return(
