@@ -15,6 +15,18 @@
         "exporerURL" : "#"
     },
     "42":{ 
+        "exchange":{
+            "address" : "0x36cBe941AE1e2b5656D15004a255F56035638f66 "
+        },
+        "mehrdad":{
+            "address" : "0xDe96B1f5A168b9a8C1C5bABee098e43a636D347b"
+        },
+        "mEth":{
+            "address" : "0x82377235CaC6f8187c2Ec0Fa97617A817E29988B"
+        },
+        "mDai":{
+            "address" : "0xB016664A4BFA1750718b773cef254c5a8bA5B6c7"
+        } ,
         "explorerURL" : "https://kovan.etherscan.io/"
 
     }
