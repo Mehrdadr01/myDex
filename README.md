@@ -10,10 +10,12 @@ The project have 3 main section :
 
 -[***Navbar***](src/assets/navbar.png)
   - Indicates the account and it balance and also the network 
+ 
 -[***Sidebar***](src/assets/sidebar.png)
   - It shows the market to choose from 
   - Deposit and Withdraws tokens 
   - Making buy and sell orders
+
 -[***main panel***](src/assets/mainpanel.png)   
   - Price chart 
   - It shows all the orders and user specific orders 
