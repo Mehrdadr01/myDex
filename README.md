@@ -27,8 +27,8 @@ The project have 3 main section :
 I used hardhat for development and also react for the front end so first of all you have install node fully installed 
   
 - you can use the link below to install node( node version manager) and hardhat : 
-[NVM GitHUb](https://github.com/nvm-sh/nvm)
-[hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview)
+ -[NVM GitHUb](https://github.com/nvm-sh/nvm)
+ -[hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview)
 
 - you have to run the hardhat node : 
  `npx hardhat node` 
