@@ -13,13 +13,13 @@ The project have 3 main section :
  [***Navbar***](src/assets/navbar.png)
  Indicates the account and it balance and also the network 
  [***Sidebar***](src/assets/sidebar.png)
-    - It shows the market to choose from 
-    - Deposit and Withdraws tokens 
-    - Making buy and sell orders
+ - It shows the market to choose from 
+ - Deposit and Withdraws tokens 
+ - Making buy and sell orders
  [***main panel***](src/assets/mainpanel.png)   
-    - Price chart 
-    - It shows all the orders and user specific orders 
-    - trades and all transactions  
+ - Price chart 
+ - It shows all the orders and user specific orders 
+ - trades and all transactions  
   
    
 
@@ -40,11 +40,11 @@ now your app is ready to use :D
 
 ## Technical Overview :
 The project consist of 4 parts: 
-    - **Contracts**
-        > ERC20 standard tokens 
-    - **Testing**
-        >I used hardhat and chai matchers to test my contracts
-    - **Scripts**
-        >using the script for deployment and seeding the exchange to automate the process
-    - **React/redux**
-        > and lastly but not least i used react for the front end development
+- **Contracts**
+> ERC20 standard tokens 
+- **Testing**
+>I used hardhat and chai matchers to test my contracts
+- **Scripts**
+>using the script for deployment and seeding the exchange to automate the process
+- **React/redux**
+> and lastly but not least i used react for the front end development
