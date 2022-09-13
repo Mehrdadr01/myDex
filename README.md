@@ -7,19 +7,17 @@
 This is a decentralized exchange that runs on ethereum chain . you can deposit/withdraw ERC20 tokens and trade them for another 
 ERC20 tokens using price chart to analyze the price of an asset and also see all the trades and transactions    
 The project have 3 main section :
-- navbar 
-- sidebar 
-- main panel 
-[***Navbar***](src/assets/navbar.png)
-- Indicates the account and it balance and also the network 
-[***Sidebar***](src/assets/sidebar.png)
-- It shows the market to choose from 
-- Deposit and Withdraws tokens 
-- Making buy and sell orders
-[***main panel***](src/assets/mainpanel.png)   
-- Price chart 
-- It shows all the orders and user specific orders 
-- trades and all transactions  
+
+-[***Navbar***](src/assets/navbar.png)
+  - Indicates the account and it balance and also the network 
+-[***Sidebar***](src/assets/sidebar.png)
+  - It shows the market to choose from 
+  - Deposit and Withdraws tokens 
+  - Making buy and sell orders
+-[***main panel***](src/assets/mainpanel.png)   
+  - Price chart 
+  - It shows all the orders and user specific orders 
+  - trades and all transactions  
   
    
 
